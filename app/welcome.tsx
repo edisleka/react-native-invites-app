@@ -8,6 +8,7 @@ import Animated, {
   SlideInUp,
   FadeInUp,
 } from 'react-native-reanimated'
+import Marquee from '@/components/Marquee'
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 
@@ -54,16 +55,7 @@ const WelcomeScreen = () => {
           className='h-3/5 w-full '
           entering={SlideInUp.springify().mass(1).damping(30)}
         >
-          <ScrollView horizontal>
-            {events.map((event) => (
-              <View className='h-full w-96 p-5 shadow-2xl' key={event.id}>
-                <Image
-                  source={event.image}
-                  className='w-full h-full rounded-3xl'
-                />
-              </View>
-            ))}
-          </ScrollView>
+          <Marquee events={events} />
         </Animated.View>
 
         <View className='gap-4 p-4 w-full flex-1 justify-center'>
