@@ -52,7 +52,7 @@ const WelcomeScreen = () => {
       <SafeAreaView>
         {/* Top part of the screen */}
         <Animated.View
-          className='h-3/5 w-full '
+          className='h-1/2 w-full '
           entering={SlideInUp.springify().mass(1).damping(30)}
         >
           <Marquee events={events} />
