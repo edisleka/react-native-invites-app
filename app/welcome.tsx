@@ -24,7 +24,6 @@ const events = [
 
 const WelcomeScreen = () => {
   const [activeIndex, setActiveIndex] = useState(0)
-
   const onButtonPress = () => {
     setActiveIndex(activeIndex >= events.length - 1 ? 0 : activeIndex + 1)
   }
@@ -43,7 +42,7 @@ const WelcomeScreen = () => {
 
       {/* BlurView */}
       <BlurView
-        intensity={90}
+        intensity={70}
         tint='dark'
         className='absolute top-0 bottom-0 left-0 right-0'
         experimentalBlurMethod='dimezisBlurView'
@@ -55,7 +54,7 @@ const WelcomeScreen = () => {
           className='h-1/2 w-full '
           entering={SlideInUp.springify().mass(1).damping(30)}
         >
-          <Marquee events={events} />
+          <Marquee events={events} onIndexChange={setActiveIndex} />
         </Animated.View>
 
         <View className='gap-4 p-4 w-full flex-1 justify-center'>

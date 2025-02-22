@@ -7,8 +7,11 @@ import Animated, {
   withTiming,
   Easing,
   interpolate,
+  useAnimatedReaction,
+  runOnJS,
 } from 'react-native-reanimated'
 import { GestureDetector, Gesture } from 'react-native-gesture-handler'
+import { useEffect, useState } from 'react'
 
 interface MarqueeItemProps {
   event: any
@@ -26,28 +29,21 @@ const MarqueeItem = ({
   itemWidth,
 }: MarqueeItemProps) => {
   // const initialPosition = itemWidth * index
-
   const { width: screenWidth } = useWindowDimensions()
-
   const shift = (containerWidth - screenWidth) / 2
-
   const initialPosition = itemWidth * index - shift
-
   const animatedStyle = useAnimatedStyle(() => {
     const position = ((initialPosition - scroll.value) % containerWidth) + shift
-
     const rotation = interpolate(
       position,
       [0, screenWidth - itemWidth],
       [-1, 1]
     )
-
     const translateY = interpolate(
       position,
       [0, (screenWidth - itemWidth) / 2, screenWidth - itemWidth],
       [3, 0, 3]
     )
-
     return {
       left: position,
       transform: [{ rotateZ: `${rotation}deg` }, { translateY }],
@@ -64,14 +60,34 @@ const MarqueeItem = ({
   )
 }
 
-const Marquee = ({ events }: { events: any[] }) => {
+const Marquee = ({
+  events,
+  onIndexChange,
+}: {
+  events: any[]
+  onIndexChange?: (index: number) => void
+}) => {
   const scroll = useSharedValue(0)
   const scrollSpeed = useSharedValue(50) // px per frame
   const { width: screenWidth } = useWindowDimensions()
-
+  const [activeIndex, setActiveIndex] = useState(0)
   const itemWidth = screenWidth * 0.65
-
   const containerWidth = events.length * itemWidth
+
+  useEffect(() => {
+    if (onIndexChange) {
+      onIndexChange(activeIndex)
+    }
+  }, [activeIndex])
+
+  useAnimatedReaction(
+    () => scroll.value,
+    (value) => {
+      const normalisedScroll = (value + screenWidth / 2) % containerWidth
+      const activeIndex = Math.floor(normalisedScroll / itemWidth)
+      runOnJS(setActiveIndex)(activeIndex)
+    }
+  )
 
   useFrameCallback((frameInfo) => {
     const deltaSeconds = (frameInfo.timeSincePreviousFrame ?? 0) / 1000
