@@ -1,4 +1,4 @@
-import { View, Text, Pressable, Image, ScrollView } from 'react-native'
+import { View, Text, Pressable, Image, StyleSheet } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { BlurView } from 'expo-blur'
 import { useState } from 'react'
@@ -9,6 +9,8 @@ import Animated, {
   FadeInUp,
 } from 'react-native-reanimated'
 import Marquee from '@/components/Marquee'
+import { LinearGradient } from 'expo-linear-gradient'
+import EventCard from '@/components/EventCard'
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 
@@ -54,7 +56,11 @@ const WelcomeScreen = () => {
           className='h-1/2 w-full '
           entering={SlideInUp.springify().mass(1).damping(30)}
         >
-          <Marquee events={events} onIndexChange={setActiveIndex} />
+          <Marquee
+            items={events}
+            onIndexChange={setActiveIndex}
+            renderItem={({ item }) => <EventCard event={item} />}
+          />
         </Animated.View>
 
         <View className='gap-4 p-4 w-full flex-1 justify-center'>
