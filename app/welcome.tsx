@@ -1,4 +1,4 @@
-import { View, Text, Pressable, Image, StyleSheet } from 'react-native'
+import { View, Text, Pressable } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { BlurView } from 'expo-blur'
 import { useState } from 'react'
@@ -11,6 +11,7 @@ import Animated, {
 import Marquee from '@/components/Marquee'
 import { LinearGradient } from 'expo-linear-gradient'
 import EventCard from '@/components/EventCard'
+import { router } from 'expo-router'
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 
@@ -27,7 +28,7 @@ const events = [
 const WelcomeScreen = () => {
   const [activeIndex, setActiveIndex] = useState(0)
   const onButtonPress = () => {
-    setActiveIndex(activeIndex >= events.length - 1 ? 0 : activeIndex + 1)
+    router.push('/create')
   }
 
   return (
